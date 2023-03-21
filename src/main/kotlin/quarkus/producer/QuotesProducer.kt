@@ -35,7 +35,7 @@ class QuotesProducer {
         val uuid = UUID.randomUUID()
         //println("Sendind data")
         logger.info("Sending quote [thread: ${threadIdentification()}, message: ${uuid}]")
-        quoteRequestEmitter?.send(uuid.toString())
+        quoteRequestEmitter.send(uuid.toString())
         logger.info("Quote sent [thread: ${threadIdentification()}, message: ${uuid}]")
         //println("Data sent")
         return uuid.toString()

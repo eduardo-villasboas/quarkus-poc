@@ -41,7 +41,7 @@ class QuoteConsumer {
             val value = random.nextInt(100)
 
             logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest.payload}]")
-            quoteResultEmitter?.send(Quote(quoteRequest.payload, value))
+            quoteResultEmitter.send(Quote(quoteRequest.payload, value))
         }
 
         return quoteRequest.ack()
