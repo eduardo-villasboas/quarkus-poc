@@ -1,14 +1,13 @@
 package quarkus.consumer
 
-import io.smallrye.reactive.messaging.annotations.Blocking
+import io.vertx.core.Vertx
+import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.*
 import org.eclipse.microprofile.reactive.messaging.*
 import org.slf4j.LoggerFactory
 import quarkus.Quote
 import java.util.*
-import java.util.concurrent.Callable
 import java.util.concurrent.CompletionStage
-import java.util.concurrent.Executors
 import javax.enterprise.context.ApplicationScoped
 
 /**
@@ -16,7 +15,7 @@ import javax.enterprise.context.ApplicationScoped
  * The result is pushed to the "quotes" RabbitMQ exchange.
  */
 @ApplicationScoped
-class QuoteConsumer {
+class QuoteConsumer(private val vertx: Vertx) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -25,26 +24,26 @@ class QuoteConsumer {
     @Channel("quotes")
     lateinit var quoteResultEmitter: Emitter<Quote>
 
-    private val executor = Executors.newFixedThreadPool(10)
+    //private val executor = Executors.newFixedThreadPool(10)
 
     @Incoming("requests")
     @Acknowledgment(Acknowledgment.Strategy.NONE)
-    @Blocking
+    //@Blocking
     @Throws(
         InterruptedException::class
     )
-    fun process(quoteRequest: Message<String>): CompletionStage<Void>? {
-        logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest.payload}]")
+    fun process(quoteRequest: String) {
+        logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
 
-        executor.submit {
-            Thread.sleep(3000)
+        CoroutineScope(vertx.dispatcher()).launch {
+            delay(3000)
             val value = random.nextInt(100)
 
-            logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest.payload}]")
-            quoteResultEmitter.send(Quote(quoteRequest.payload, value))
+            logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
+            quoteResultEmitter.send(Quote(quoteRequest, value))
+
         }
 
-        return quoteRequest.ack()
     }
 
     private fun threadIdentification() =

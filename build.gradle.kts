@@ -21,6 +21,10 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("io.quarkus:quarkus-arc")
+    //implementation("io.vertx:vertx-lang-kotlin-coroutines:4.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.0-Beta")
+    implementation("io.vertx:vertx-lang-kotlin-coroutines")
+
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }

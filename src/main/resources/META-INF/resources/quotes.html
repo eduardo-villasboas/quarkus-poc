@@ -38,5 +38,37 @@
       });
     };
 
+    $("#request-quote").click((event) => {
+        fetch("/quotes/request", {method: "POST"})
+        .then(res => res.text())
+        .then(qid => {
+            var row = $(`<h4 class='col-md-12' id='${qid}'>Quote # <i>${qid}</i> | <strong>Pending</strong></h4>`);
+            $(".quotes").append(row);
+        });
+    });
+    var source = new EventSource("/quotes");
+    source.onmessage = (event) => {
+      var json = JSON.parse(event.data);
+      $(`#${json.id}`).html(function(index, html) {
+        return html.replace("Pending", `\$\xA0${json.price}`);
+      });
+    };
+
+    $("#request-quote").click((event) => {
+        fetch("/quotes/request", {method: "POST"})
+        .then(res => res.text())
+        .then(qid => {
+            var row = $(`<h4 class='col-md-12' id='${qid}'>Quote # <i>${qid}</i> | <strong>Pending</strong></h4>`);
+            $(".quotes").append(row);
+        });
+    });
+    var source = new EventSource("/quotes");
+    source.onmessage = (event) => {
+      var json = JSON.parse(event.data);
+      $(`#${json.id}`).html(function(index, html) {
+        return html.replace("Pending", `\$\xA0${json.price}`);
+      });
+    };
+
 </script>
 </html>
