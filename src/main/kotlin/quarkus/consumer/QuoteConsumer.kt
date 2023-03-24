@@ -7,7 +7,6 @@ import org.eclipse.microprofile.reactive.messaging.*
 import org.slf4j.LoggerFactory
 import quarkus.Quote
 import java.util.*
-import java.util.concurrent.CompletionStage
 import javax.enterprise.context.ApplicationScoped
 
 /**
@@ -36,7 +35,10 @@ class QuoteConsumer(private val vertx: Vertx) {
         logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
 
         CoroutineScope(vertx.dispatcher()).launch {
-            delay(3000)
+            //delay(3000)
+            logger.info("Heavy process start [thread: ${threadIdentification()}, message: ${quoteRequest}]")
+            for (i in 1..1000000000) {}
+            logger.info("Heavy process finish [thread: ${threadIdentification()}, message: ${quoteRequest}]")
             val value = random.nextInt(100)
 
             logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
