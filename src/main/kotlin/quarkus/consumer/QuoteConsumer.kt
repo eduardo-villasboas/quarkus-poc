@@ -1,5 +1,6 @@
 package quarkus.consumer
 
+import io.smallrye.reactive.messaging.annotations.Blocking
 import io.vertx.core.Vertx
 import io.vertx.kotlin.coroutines.dispatcher
 import kotlinx.coroutines.*
@@ -13,8 +14,7 @@ import javax.enterprise.context.ApplicationScoped
  * A bean consuming data from the "quote-requests" RabbitMQ queue and giving out a random quote.
  * The result is pushed to the "quotes" RabbitMQ exchange.
  */
-@ApplicationScoped
-class QuoteConsumer(private val vertx: Vertx) {
+@ApplicationScoped class QuoteConsumer(private val vertx: Vertx) {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -23,11 +23,8 @@ class QuoteConsumer(private val vertx: Vertx) {
     @Channel("quotes")
     lateinit var quoteResultEmitter: Emitter<Quote>
 
-    //private val executor = Executors.newFixedThreadPool(10)
-
     @Incoming("requests")
-    @Acknowledgment(Acknowledgment.Strategy.NONE)
-    //@Blocking
+    @Blocking
     @Throws(
         InterruptedException::class
     )
@@ -37,7 +34,7 @@ class QuoteConsumer(private val vertx: Vertx) {
         CoroutineScope(vertx.dispatcher()).launch {
             //delay(3000)
             logger.info("Heavy process start [thread: ${threadIdentification()}, message: ${quoteRequest}]")
-            for (i in 1..1000000000) {}
+            delay(5000)
             logger.info("Heavy process finish [thread: ${threadIdentification()}, message: ${quoteRequest}]")
             val value = random.nextInt(100)
 
