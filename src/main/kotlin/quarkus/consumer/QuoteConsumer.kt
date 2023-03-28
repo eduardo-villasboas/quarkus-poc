@@ -4,7 +4,7 @@ import io.smallrye.reactive.messaging.annotations.Blocking
 import io.vertx.core.Promise
 import io.vertx.core.Vertx
 
-import kotlinx.coroutines.*
+
 import org.eclipse.microprofile.reactive.messaging.*
 import org.slf4j.LoggerFactory
 import quarkus.Quote
