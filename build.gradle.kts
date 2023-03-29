@@ -14,8 +14,10 @@ val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
 
 dependencies {
+
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
-    implementation("io.quarkus:quarkus-smallrye-reactive-messaging-rabbitmq")
+    implementation("io.quarkus:quarkus-smallrye-reactive-messaging-amqp")
+    //implementation("io.quarkus:quarkus-smallrye-reactive-messaging-rabbitmq")
     implementation("io.quarkus:quarkus-resteasy-reactive")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
