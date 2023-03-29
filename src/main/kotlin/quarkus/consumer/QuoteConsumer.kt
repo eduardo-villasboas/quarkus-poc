@@ -24,10 +24,10 @@ class QuoteConsumer(private val vertx: io.vertx.core.Vertx) {
 
     private val random = Random()
 
-    @Channel("quotes")
+    @Channel("quote-result-ch-out")
     lateinit var quoteResultEmitter: Emitter<Quote>
 
-    @Incoming("requests")
+    @Incoming("quote-request-ch-in")
     @Blocking
     @Throws(
         InterruptedException::class

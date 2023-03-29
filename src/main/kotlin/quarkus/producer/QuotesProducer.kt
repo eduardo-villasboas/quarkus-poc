@@ -16,10 +16,10 @@ import javax.ws.rs.core.MediaType
 @Path("/quotes")
 class QuotesProducer {
 
-    @Channel("quote-requests")
+    @Channel("quote-request-ch-out")
     lateinit var quoteRequestEmitter: Emitter<String>
 
-    @Channel("returned-quotes")
+    @Channel("quote-result-ch-in")
     lateinit var quotes: Multi<Quote>
 
     /**
