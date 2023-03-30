@@ -14,6 +14,7 @@ import javax.ws.rs.core.MediaType
 
 
 @Path("/quotes")
+
 class QuotesProducer {
 
     @Channel("quote-request-ch-out")
