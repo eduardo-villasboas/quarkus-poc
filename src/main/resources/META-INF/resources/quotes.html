@@ -30,13 +30,6 @@
             $(".quotes").append(row);
         });
     });
-    var source = new EventSource("/quotes");
-    source.onmessage = (event) => {
-      var json = JSON.parse(event.data);
-      $(`#${json.id}`).html(function(index, html) {
-        return html.replace("Pending", `\$\xA0${json.price}`);
-      });
-    };
 
     $("#request-quote").click((event) => {
         fetch("/quotes/request", {method: "POST"})
@@ -46,14 +39,6 @@
             $(".quotes").append(row);
         });
     });
-    var source = new EventSource("/quotes");
-    source.onmessage = (event) => {
-      var json = JSON.parse(event.data);
-      $(`#${json.id}`).html(function(index, html) {
-        return html.replace("Pending", `\$\xA0${json.price}`);
-      });
-    };
-
     $("#request-quote").click((event) => {
         fetch("/quotes/request", {method: "POST"})
         .then(res => res.text())
@@ -62,6 +47,7 @@
             $(".quotes").append(row);
         });
     });
+
     var source = new EventSource("/quotes");
     source.onmessage = (event) => {
       var json = JSON.parse(event.data);
@@ -69,6 +55,5 @@
         return html.replace("Pending", `\$\xA0${json.price}`);
       });
     };
-
 </script>
 </html>

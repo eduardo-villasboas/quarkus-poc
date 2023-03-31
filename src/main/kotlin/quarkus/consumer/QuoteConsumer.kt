@@ -28,22 +28,20 @@ class QuoteConsumer {
     lateinit var quoteResultEmitter: Emitter<Quote>
 
     @Incoming("requests")
-    @Blocking(
-        value = "quote-request-thread-pool",
-        ordered = false
-    )
+    @Blocking(value = "quote-request-thread-pool", ordered = false)
     @Throws(
         InterruptedException::class
     )
     fun process(quoteRequest: String) {
-        logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
 
+        logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
         logger.info("Heavy process start [thread: ${threadIdentification()}, message: ${quoteRequest}]")
         Thread.sleep(1000)
         logger.info("Heavy process finish [thread: ${threadIdentification()}, message: ${quoteRequest}]")
         val value = random.nextInt(100)
         logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
         quoteResultEmitter.send(Quote(quoteRequest, value))
+
     }
 
     private fun threadIdentification() =
