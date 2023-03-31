@@ -18,7 +18,7 @@ import javax.ws.rs.Produces
  * The result is pushed to the "quotes" RabbitMQ exchange.
  */
 @ApplicationScoped
-class QuoteConsumer(private val vertx: io.vertx.core.Vertx) {
+class QuoteConsumer {
 
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
@@ -28,25 +28,22 @@ class QuoteConsumer(private val vertx: io.vertx.core.Vertx) {
     lateinit var quoteResultEmitter: Emitter<Quote>
 
     @Incoming("requests")
-    @Blocking
+    @Blocking(
+        value = "quote-request-thread-pool",
+        ordered = false
+    )
     @Throws(
         InterruptedException::class
     )
     fun process(quoteRequest: String) {
         logger.info("Starting process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
 
-        Vertx(vertx).rxExecuteBlocking {
-            logger.info("Heavy process start [thread: ${threadIdentification()}, message: ${quoteRequest}]")
-            Thread.sleep(1000)
-            logger.info("Heavy process finish [thread: ${threadIdentification()}, message: ${quoteRequest}]")
-            val value = random.nextInt(100)
-
-            logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
-            it.complete(value)
-        }.subscribeOn(Schedulers.computation())
-            .subscribe {
-            quoteResultEmitter.send(Quote(quoteRequest, it))
-        }
+        logger.info("Heavy process start [thread: ${threadIdentification()}, message: ${quoteRequest}]")
+        Thread.sleep(1000)
+        logger.info("Heavy process finish [thread: ${threadIdentification()}, message: ${quoteRequest}]")
+        val value = random.nextInt(100)
+        logger.info("Finishing process [thread: ${threadIdentification()}, message: ${quoteRequest}]")
+        quoteResultEmitter.send(Quote(quoteRequest, value))
     }
 
     private fun threadIdentification() =
