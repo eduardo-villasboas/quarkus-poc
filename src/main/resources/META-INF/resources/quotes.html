@@ -22,6 +22,7 @@
 </body>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    /*
     $("#request-quote").click((event) => {
         fetch("/quotes/request", {method: "POST"})
         .then(res => res.text())
@@ -39,6 +40,8 @@
             $(".quotes").append(row);
         });
     });
+    */
+
     $("#request-quote").click((event) => {
         fetch("/quotes/request", {method: "POST"})
         .then(res => res.text())
@@ -49,11 +52,15 @@
     });
 
     var source = new EventSource("/quotes");
-    source.onmessage = (event) => {
+    console.log(source);
+    var eventHandler = (event) => {
+      console.log(event);
       var json = JSON.parse(event.data);
       $(`#${json.id}`).html(function(index, html) {
         return html.replace("Pending", `\$\xA0${json.price}`);
       });
     };
+    source.addEventListener('update', eventHandler, false);
+
 </script>
 </html>
